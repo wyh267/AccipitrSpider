@@ -24,6 +24,7 @@ import (
 	"os"
 	"strings"
 	"time"
+	"net/http"
 	//"sync"
 	//"time"
 )
@@ -71,6 +72,10 @@ func main() {
 		kvdb = u.NewPandionKVWithFile(DBname, logger)
 	}
 
+
+	router := &Router{Kvdb:kvdb}
+
+
 	//初始化自定义的插件
 	ps := make(map[string]u.PlugInterface)
 	plug := Plugs.NewYXQ("yingxiaoqun", logger, nil) // dbAdaptor)
@@ -110,6 +115,16 @@ func main() {
 		}
 	}
 
+
+	addr := fmt.Sprintf(":%d", 9999)
+	go http.ListenAndServe(addr, router)
+	//err = http.ListenAndServe(addr, router)
+	//if err != nil {
+	//	logger.Error("Server start fail: %v", err)
+	//	os.Exit(1)
+	//}
+	fmt.Printf("START SERVER : %v\n",addr)
+
 	interval, _ := configure.GetInterval()
 	for {
 		select {
@@ -122,6 +137,13 @@ func main() {
 
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
 
 	//out<-u.SpiderOut{Url:"http://www.yingxiaoqun.com111",Content:"",Header:""}
 	u.SpiderSync.Wait()

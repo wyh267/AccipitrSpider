@@ -31,6 +31,8 @@ func (this *Ikmultimedia) GetNextUrls(content, url string) ([]u.CrawlData, error
 
 func (this *Ikmultimedia) GetDetailContent(content, url string) (map[string]interface{}, error) {
 
+	result:=make(map[string]interface{})
+
 	doc, _ := gokogiri.ParseHtml([]byte(content))
 	defer doc.Free()
 	title_xpath, err := doc.Search("id(\"products-maindiv\")/div[*]/div[*]/div[*]/div/p/a/span")
@@ -40,12 +42,13 @@ func (this *Ikmultimedia) GetDetailContent(content, url string) (map[string]inte
 
 	for _,title := range title_xpath{
 		this.Logger.Info("[Ikmultimedia : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 
 	
 
 
-	return nil, nil
+	return result, nil
 }
 
 func (this *Ikmultimedia) SaveDetailContent(details map[string]interface{}) error {

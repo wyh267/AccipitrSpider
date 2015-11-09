@@ -122,3 +122,18 @@ func (this *Scheduler)CheckUrl(url string) bool{
 
 
 
+
+func (this *Scheduler)SaveInfo(product,company string) bool {
+	
+	_,err := this.kvdb.Get(product)
+	if err != nil {
+		this.kvdb.Set(product,company)
+		return true
+	}
+	
+	return false
+	
+}
+
+
+

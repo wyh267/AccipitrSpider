@@ -44,6 +44,7 @@ func (this *Yingxiaoqun) GetNextUrls(content, url string) ([]u.CrawlData, error)
 
 func (this *Yingxiaoqun) GetDetailContent(content, url string) (map[string]interface{}, error) {
 
+	//result:=make(map[string]interface{})
 	num_pat, err := regexp.Compile("(\\d+)$")
 	if err != nil {
 		return nil, err

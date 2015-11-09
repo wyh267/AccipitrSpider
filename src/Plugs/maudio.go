@@ -31,6 +31,7 @@ func (this *MAudio) GetNextUrls(content, url string) ([]u.CrawlData, error) {
 
 func (this *MAudio) GetDetailContent(content, url string) (map[string]interface{}, error) {
 
+	result:=make(map[string]interface{})
 	doc, _ := gokogiri.ParseHtml([]byte(content))
 	defer doc.Free()
 	title_xpath, err := doc.Search("id(\"content\")/div/div/ul/li[*]/div/div[3]/h6/a")
@@ -40,9 +41,10 @@ func (this *MAudio) GetDetailContent(content, url string) (map[string]interface{
 
 	for _,title := range title_xpath{
 		this.Logger.Info("[MADUDIO : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 
-	return nil, nil
+	return result, nil
 }
 
 func (this *MAudio) SaveDetailContent(details map[string]interface{}) error {

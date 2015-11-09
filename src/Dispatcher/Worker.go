@@ -8,6 +8,7 @@ import (
 	//"strings"
 	//"github.com/moovweb/gokogiri"
 	s "Scheduler"
+	"fmt"
 	
 )
 
@@ -40,7 +41,10 @@ func (this *Worker)GoWork(content,url,handler string)error{
 	//this.Logger.Info("[INFO] urls %v,err:%v",urls,err)
 	
 	if len(urls)==0 || urls==nil || err !=nil {
-		this.Plug[handler].GetDetailContent(content,url)
+		detail,_:=this.Plug[handler].GetDetailContent(content,url)
+		for k,v := range detail{
+			this.Sche.SaveInfo(k,fmt.Sprintf("%v",v))
+		}
 	}else{
 		for _,url := range urls{
 			this.Sche.SendUrl(url)

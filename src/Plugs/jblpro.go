@@ -31,6 +31,7 @@ func (this *Jblpro) GetNextUrls(content, url string) ([]u.CrawlData, error) {
 
 func (this *Jblpro) GetDetailContent(content, url string) (map[string]interface{}, error) {
 
+	result:=make(map[string]interface{})
 	doc, _ := gokogiri.ParseHtml([]byte(content))
 	defer doc.Free()
 	title_xpath, err := doc.Search("//*[@id=\"contentPlaceholder_C002_Col00\"]/div[*]/div/ul/li/a")
@@ -40,6 +41,7 @@ func (this *Jblpro) GetDetailContent(content, url string) (map[string]interface{
 
 	for _,title := range title_xpath{
 		this.Logger.Info("[JBLPRO : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 
 	products_xpath2, err := doc.Search("//*[@id=\"contentPlaceholder_C002_Col01\"]/div[*]/div/ul/li/a")
@@ -49,6 +51,7 @@ func (this *Jblpro) GetDetailContent(content, url string) (map[string]interface{
 
 	for _,title := range products_xpath2{
 		this.Logger.Info("[JBLPRO : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 	
 	products_xpath3, err := doc.Search("//*[@id=\"contentPlaceholder_C002_Col02\"]/div[*]/div/ul/li/a")
@@ -58,10 +61,11 @@ func (this *Jblpro) GetDetailContent(content, url string) (map[string]interface{
 
 	for _,title := range products_xpath3{
 		this.Logger.Info("[JBLPRO : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 
 
-	return nil, nil
+	return result, nil
 }
 
 func (this *Jblpro) SaveDetailContent(details map[string]interface{}) error {

@@ -131,6 +131,25 @@ func (this *PandionKV)loadLocalFiles()error{
 
 
 
+func (this *PandionKV)GetAllKeys()(map[string][]string,error){
+	
+
+	rs:=make(map[string][]string)
+	for k,v := range this.IndexInfo{
+		_,ok:=rs[v.Value]
+		if !ok {
+			rs[v.Value]=make([]string,0)
+			rs[v.Value]=append(rs[v.Value],k)
+		}else{
+			rs[v.Value]=append(rs[v.Value],k)
+		}
+		
+	}
+	
+	return rs,nil
+}
+
+
 func (this *PandionKV)getFromDisk(offset,lens int64) (string,error){
 	
 	return this.detailMmap.ReadString(offset,lens),nil

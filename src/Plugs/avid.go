@@ -45,6 +45,7 @@ func (this *Avid) GetDetailContent(content, url string) (map[string]interface{},
 	}
 
 	*/
+	result:=make(map[string]interface{})
 	title_pat, err := regexp.Compile("<a id=\"ctl00_listing_link_.*?>(.*?)<")
 	//title_pat := regexp.MustCompile("<a id=\"ctl00_listing_link_.*?>(.*?)<")
 	if err != nil {
@@ -59,11 +60,12 @@ func (this *Avid) GetDetailContent(content, url string) (map[string]interface{},
 	for _,m := range matchs{
 		if len(m)>0{
 			this.Logger.Info("[AVID : PRODUCT]  %v",string(m[1]))
+			result[string(m[1])]=this.Name
 		}
 	}
 
 
-	return nil, nil
+	return result, nil
 }
 
 func (this *Avid) SaveDetailContent(details map[string]interface{}) error {

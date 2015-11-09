@@ -31,6 +31,7 @@ func (this *Radialeng) GetNextUrls(content, url string) ([]u.CrawlData, error) {
 
 func (this *Radialeng) GetDetailContent(content, url string) (map[string]interface{}, error) {
 
+	result:=make(map[string]interface{})
 	doc, _ := gokogiri.ParseHtml([]byte(content))
 	defer doc.Free()
 	title_xpath, err := doc.Search("//*[@id=\"reviewBlock\"]/div[*]/span")
@@ -40,9 +41,10 @@ func (this *Radialeng) GetDetailContent(content, url string) (map[string]interfa
 
 	for _,title := range title_xpath{
 		this.Logger.Info("[RADIALENG : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 
-	return nil, nil
+	return result, nil
 }
 
 func (this *Radialeng) SaveDetailContent(details map[string]interface{}) error {

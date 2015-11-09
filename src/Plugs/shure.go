@@ -31,6 +31,7 @@ func (this *Shure) GetNextUrls(content, url string) ([]u.CrawlData, error) {
 
 func (this *Shure) GetDetailContent(content, url string) (map[string]interface{}, error) {
 
+	result:=make(map[string]interface{})
 	doc, _ := gokogiri.ParseHtml([]byte(content))
 	defer doc.Free()
 	title_xpath, err := doc.Search("id(\"main\")/div/div[2]/div/div[1]/div[2]/div[*]/div[*]/article/div[2]/h1/a")
@@ -40,12 +41,13 @@ func (this *Shure) GetDetailContent(content, url string) (map[string]interface{}
 
 	for _,title := range title_xpath{
 		this.Logger.Info("[Shure : PRODUCT] %v", title.Content())
+		result[title.Content()]=this.Name
 	}
 
 	
 
 
-	return nil, nil
+	return result, nil
 }
 
 func (this *Shure) SaveDetailContent(details map[string]interface{}) error {
